@@ -1,0 +1,23 @@
+#Directories
+
+/.metadata/
+.recommenders
+*/.settings/
+*/bin/
+
+#Files
+
+*.classpath
+*.dat
+*.project
+*.class
+*.txt
+*.err
+*.log
+
+#Package Files 
+
+*.jar
+*.war
+*.ear
+

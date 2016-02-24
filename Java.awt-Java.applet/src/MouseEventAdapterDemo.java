@@ -11,15 +11,15 @@ import java.applet.*;
 public class MouseEventAdapterDemo extends Applet {
 
 	public void init() {
-		addMouseListener(new MyMouseAdapter(this));
-		addMouseMotionListener(new MyMouseMotionAdapter(this));
+		addMouseListener(new MouseEventAdapter(this));
+		addMouseMotionListener(new MouseMotionEventAdapter(this));
 	}
 }
 
-class MyMouseAdapter extends MouseAdapter {
+class MouseEventAdapter extends MouseAdapter {
 	MouseEventAdapterDemo adapterDemo;
 
-	public MyMouseAdapter(MouseEventAdapterDemo adapterDemo) {
+	public MouseEventAdapter(MouseEventAdapterDemo adapterDemo) {
 		this.adapterDemo = adapterDemo;
 	}
 
@@ -30,10 +30,10 @@ class MyMouseAdapter extends MouseAdapter {
 	}
 }
 
-class MyMouseMotionAdapter extends MouseMotionAdapter {
+class MouseMotionEventAdapter extends MouseMotionAdapter {
 	MouseEventAdapterDemo adapterDemo;
 
-	public MyMouseMotionAdapter(MouseEventAdapterDemo adapterDemo) {
+	public MouseMotionEventAdapter(MouseEventAdapterDemo adapterDemo) {
 		this.adapterDemo = adapterDemo;
 	}
 

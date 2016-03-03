@@ -14,7 +14,7 @@ class SharedForAtomicDemo {
 	static AtomicInteger ai = new AtomicInteger(0);
 }
 
-// Потоки сполнения, в котором инкрементируется значение счетчика
+// Поток исполнения, в котором инкрементируется значение счетчика
 class AtomThread implements Runnable {
 	String name;
 

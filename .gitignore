@@ -9,7 +9,7 @@
 
 *.classpath
 *.dat
-*.project
+#*.project
 *.class
 *.txt
 *.err

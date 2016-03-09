@@ -40,7 +40,7 @@ public class JListDemo extends JApplet {
 		// ввести список на панели с полосами прокрутки
 		jscrlp = new JScrollPane(jlst);
 		// задать предпочтительные размеры панели с полосами прокрутки
-		jscrlp.setPreferredSize(new Dimension(120, 90));
+		jscrlp.setPreferredSize(new Dimension(120, 190));
 		// создать метку для отображения выбранного города
 		jlab = new JLabel("Choose а City");// Выбор города
 

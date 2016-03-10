@@ -9,19 +9,21 @@ import java.security.Permission;
 
 import javax.swing.*;
 
-class JMenuDemo implements ActionListener {
+class JMenuToolbarDemoWithAction implements ActionListener {
 	JLabel jlab;
+	DebugAction setAct;
+	DebugAction clearAct;
+	DebugAction resumeAct;
 
-	JMenuDemo() {
-		//System.out.println(getClass().getProtectionDomain().getCodeSource());
-		//if (1==1) return;
+	JMenuToolbarDemoWithAction() {
+		// System.out.println(getClass().getProtectionDomain().getCodeSource());
+		// if (1==1) return;
 		System.setSecurityManager(new SecurityManager());
 		Permission p = new FilePermission("D:\\java-dev\\git\\courses\\Swing\\bin\\about_icon.png", "read");
 		SecurityManager security = System.getSecurityManager();
 		if (security != null)
 			security.checkPermission(p);
-		
-		
+
 		// создать новый контейнер типа JFrame
 		JFrame jfrm = new JFrame("Menu Demo");// Демонстрация меню
 		// указать диспетчер поточной компоновки тиnа FlowLayout
@@ -36,7 +38,7 @@ class JMenuDemo implements ActionListener {
 		// создать строку меню
 		JMenuBar jmb = new JMenuBar();
 
-		// создатьменюFilaсмнемоникойиоперативнЫЬIИклавишами
+		// создать меню File с мнемоникой и оперативными клавишами
 		JMenu jmFile = new JMenu("File");// Файл
 		jmFile.setMnemonic(KeyEvent.VK_F);
 		JMenuItem jmiOpen = new JMenuItem("Open", KeyEvent.VK_O);// Открыть
@@ -55,17 +57,9 @@ class JMenuDemo implements ActionListener {
 		jmFile.add(jmiExit);
 
 		jmb.add(jmFile);
-		// создатьменюOptions
+		// создатьменю Options
 		JMenu jmOptions = new JMenu("Options");// Параметры
-		// создатьnодменюColors
-		JMenu jmColors = new JMenu("Colors");// Цвета
-		JMenuItem jmiRed = new JMenuItem("Red");// Красный
-		JMenuItem jmiGreen = new JMenuItem("Green");// Зеленый
-		JMenuItem jmiBlue = new JMenuItem("Blue");// Синий
-		jmColors.add(jmiRed);
-		jmColors.add(jmiGreen);
-		jmColors.add(jmiBlue);
-		jmOptions.add(jmColors);
+
 		// создать подменю Priority
 		JMenu jmPriority = new JMenu("Priority");// Приоритет
 		JMenuItem jmiHigh = new JMenuItem("High");// высокий
@@ -73,7 +67,7 @@ class JMenuDemo implements ActionListener {
 		jmPriority.add(jmiHigh);
 		jmPriority.add(jmiLow);
 		jmOptions.add(jmPriority);
-		// создатьпунктменюReaet
+		// создать пункт меню Reset
 		JMenuItem jmiReset = new JMenuItem("Reset");// Сбросить
 		jmOptions.addSeparator();
 		jmOptions.add(jmiReset);
@@ -95,13 +89,51 @@ class JMenuDemo implements ActionListener {
 		jmiClose.addActionListener(this);
 		jmiSave.addActionListener(this);
 		jmiExit.addActionListener(this);
-		jmiRed.addActionListener(this);
-		jmiGreen.addActionListener(this);
-		jmiBlue.addActionListener(this);
+
 		jmiHigh.addActionListener(this);
 		jmiLow.addActionListener(this);
 		jmiReset.addActionListener(this);
 		jmiAbout.addActionListener(this);
+
+		// загрузить изображения значков
+		ImageIcon setIcon = new ImageIcon("breakpoint_new(1).png");
+		ImageIcon clearIcon = new ImageIcon("breakpoint_delete(1).png");
+		ImageIcon resumeIcon = new ImageIcon("breakpoint_run(1).png");
+		/// создать действия
+		setAct = new DebugAction("Set Breakpoint", setIcon, KeyEvent.VK_S, KeyEvent.VK_B, "Set а breakpoint.");
+		// Установить точку прерывания
+		clearAct = new DebugAction("Clear Breakpoint", clearIcon, KeyEvent.VK_C, KeyEvent.VK_L, "Clear а breakpoint.");
+		// Очистить точку прерывания
+		resumeAct = new DebugAction("Resume", resumeIcon, KeyEvent.VK_R, KeyEvent.VK_R,
+				"Resume execution after breakpoint.");
+		// Возобновить выполнение после точки прерывания
+		// сделать первоначально недоступным вариант выбора Clear Breakpoint
+		clearAct.setEnabled(false);
+
+		// создатькнопкидляпанелиинструментов,
+		// используясоответствующиедействия
+		JButton jbtnSet = new JButton(setAct);
+		JButton jbtnClear = new JButton(clearAct);
+		JButton jbtnResume = new JButton(resumeAct);
+		// создатьпанельинструментовDeЬuq
+		JToolBar jtb = new JToolBar("Breakpoiпts");
+		// ввестикнопкинапанелиинструментов
+		jtb.add(jbtnSet);
+		jtb.add(jbtnClear);
+		jtb.add(jbtnResume);
+		// ввести панель инструментов в северном расположении панели содержимого
+		jfrm.add(jtb, BorderLayout.NORTH);
+		// создать подменю Debug, входящее в меню Options,
+		// используя действия для создания пунктов этого подменю
+
+		JMenu jmDebug = new JMenu("Debug");
+		JMenuItem jmiSetBP = new JMenuItem(setAct);
+		JMenuItem jmiClearBP = new JMenuItem(clearAct);
+		JMenuItem jmiResume = new JMenuItem(resumeAct);
+		jmDebug.add(jmiSetBP);
+		jmDebug.add(jmiClearBP);
+		jmDebug.add(jmiResume);
+		jmOptions.add(jmDebug);
 
 		// ввести метку на панели содержимого
 		jfrm.add(jlab);
@@ -127,8 +159,35 @@ class JMenuDemo implements ActionListener {
 		// создать фрейм в потоке диспетчеризации событий
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new JMenuDemo();
+				new JMenuToolbarDemoWithAction();
 			}
 		});
 	}
+
+	// Класс действий для подменю и панели инструментов Debug
+	class DebugAction extends AbstractAction {
+
+		public DebugAction(String name, Icon image, int mnem, int accel, String tTip) {
+			super(name, image);
+			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(accel, InputEvent.CTRL_DOWN_MASK));
+			putValue(MNEMONIC_KEY, new Integer(mnem));
+			putValue(SHORT_DESCRIPTION, tTip);
+		}
+
+		// обработать события как на панели инструментов, так и в подменю Debug
+		public void actionPerformed(ActionEvent ae) {
+			String comStr = ae.getActionCommand();
+			jlab.setText(comStr + " Selected"); // Выбрано указанное
+			// изменить разрешенное состояние вариантов выбора
+			// режимов установки и очистки точек прерывания
+			if (comStr.equals("Set Breakpoint")) {
+				clearAct.setEnabled(true);
+				setAct.setEnabled(false);
+			} else if (comStr.equals("Clear Breakpoint")) {
+				clearAct.setEnabled(false);
+				setAct.setEnabled(true);
+			}
+		}
+	}
+
 }

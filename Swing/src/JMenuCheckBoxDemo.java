@@ -9,19 +9,18 @@ import java.security.Permission;
 
 import javax.swing.*;
 
-class JMenuDemo implements ActionListener {
+class JMenuCheckBoxDemo implements ActionListener {
 	JLabel jlab;
 
-	JMenuDemo() {
-		//System.out.println(getClass().getProtectionDomain().getCodeSource());
-		//if (1==1) return;
+	JMenuCheckBoxDemo() {
+		// System.out.println(getClass().getProtectionDomain().getCodeSource());
+		// if (1==1) return;
 		System.setSecurityManager(new SecurityManager());
 		Permission p = new FilePermission("D:\\java-dev\\git\\courses\\Swing\\bin\\about_icon.png", "read");
 		SecurityManager security = System.getSecurityManager();
 		if (security != null)
 			security.checkPermission(p);
-		
-		
+
 		// создать новый контейнер типа JFrame
 		JFrame jfrm = new JFrame("Menu Demo");// Демонстрация меню
 		// указать диспетчер поточной компоновки тиnа FlowLayout
@@ -53,32 +52,44 @@ class JMenuDemo implements ActionListener {
 		jmFile.add(jmiSave);
 		jmFile.addSeparator();
 		jmFile.add(jmiExit);
-
 		jmb.add(jmFile);
-		// создатьменюOptions
-		JMenu jmOptions = new JMenu("Options");// Параметры
-		// создатьnодменюColors
-		JMenu jmColors = new JMenu("Colors");// Цвета
-		JMenuItem jmiRed = new JMenuItem("Red");// Красный
-		JMenuItem jmiGreen = new JMenuItem("Green");// Зеленый
-		JMenuItem jmiBlue = new JMenuItem("Blue");// Синий
+
+		// создать меню Options
+		JMenu jmOptions = new JMenu("Options");
+		// создать подменю Colors
+		JMenu jmColors = new JMenu("Colors");
+		// использовать флажки, чтобы пользователь мог выбрать
+		// сразу несколько цветов
+		JCheckBoxMenuItem jmiRed = new JCheckBoxMenuItem("Red");
+		JCheckBoxMenuItem jmiGreen = new JCheckBoxMenuItem("Green");
+		JCheckBoxMenuItem jmiBlue = new JCheckBoxMenuItem("Blue");
 		jmColors.add(jmiRed);
 		jmColors.add(jmiGreen);
 		jmColors.add(jmiBlue);
 		jmOptions.add(jmColors);
-		// создать подменю Priority
-		JMenu jmPriority = new JMenu("Priority");// Приоритет
-		JMenuItem jmiHigh = new JMenuItem("High");// высокий
-		JMenuItem jmiLow = new JMenuItem("Low");// Низкий
+		// создатьподменюPriority
+		JMenu jmPriority = new JMenu("Priority");
+		// Использовать кнопки-переключатели для установки приоритета.
+		// Благодаря этому в меню не только отображается установленный
+		// приоритет, но и гарантируется установка одного и только
+		// одного приоритета. Исходно выбирается кнопка-переключатель
+		// в пункте меню High
+		JRadioButton jmiHigh = new JRadioButton("High", true);
+		JRadioButtonMenuItem jmiLow = new JRadioButtonMenuItem("Low");
 		jmPriority.add(jmiHigh);
 		jmPriority.add(jmiLow);
 		jmOptions.add(jmPriority);
-		// создатьпунктменюReaet
-		JMenuItem jmiReset = new JMenuItem("Reset");// Сбросить
+		// создать группу кнопок-переключателей в пунктах подменю Priority
+		ButtonGroup bg = new ButtonGroup();
+		bg.add(jmiHigh);
+		bg.add(jmiLow);
+		// создать пункт меню Reset
+		JMenuItem jmiReset = new JMenuItem("Reset");
 		jmOptions.addSeparator();
 		jmOptions.add(jmiReset);
-		// И наконец, ввести все выбираемые меню в строку меню
+		// инаконец,ввестименюOptionsвстрокуменю
 		jmb.add(jmOptions);
+
 		// создать меню Help
 		JMenu jmHelp = new JMenu("Help");// Справка
 		ImageIcon aboutIcon = new ImageIcon("D:\\java-dev\\git\\courses\\Swing\\bin\\about_icon.png");
@@ -127,7 +138,7 @@ class JMenuDemo implements ActionListener {
 		// создать фрейм в потоке диспетчеризации событий
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new JMenuDemo();
+				new JMenuCheckBoxDemo();
 			}
 		});
 	}

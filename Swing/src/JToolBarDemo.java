@@ -1,13 +1,17 @@
 
 //Продемонстрировать простое главное меню
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FilePermission;
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.Permission;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 
 public class JToolBarDemo implements ActionListener {
 	JLabel jlab;

@@ -1,10 +1,11 @@
 
 //Обработка события в Swing-приложении
-import java.awt.*;
-
 import java.awt.FlowLayout;
-import java.awt.event.*;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 class EventDemoLambda {
 	JLabel jlab;

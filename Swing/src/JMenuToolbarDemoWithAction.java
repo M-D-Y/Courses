@@ -3,13 +3,11 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.FilePermission;
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.Permission;
 
 import javax.swing.*;
 
-class JMenuToolbarDemoWithAction implements ActionListener {
+public class JMenuToolbarDemoWithAction implements ActionListener {
 	JLabel jlab;
 	DebugAction setAct;
 	DebugAction clearAct;

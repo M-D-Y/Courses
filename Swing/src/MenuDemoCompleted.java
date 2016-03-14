@@ -4,68 +4,86 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-class MenuDemoCompleted implements ActionListener {
+public class MenuDemoCompleted implements ActionListener {
 	JFrame jfrm;
 	JLabel jlab;
-	JMenuBar jmЬ;
+	JMenuBar jmb;
 	JToolBar jtb;
 	JPopupMenu jpu;
 	DebugAction setAct;
 	DebugAction clearAct;
 	DebugAction resumeAct;
 
-MenuDemoCompleted(){
-//создать новый контейнер тиnа JFrame
-jfrm = new JFrame("Menu Demo Completed");
-//Полная демонстрация меню
-//использовать граничную компоновку, выбираемую по умолчанию
-//задать исходные размеры фрейма
-jfrm.setSize(360, 200);
-//завершить прикладную программу, когда пользователь закроет ее окно
-jfrm.setDefaultCloseOperatioп(JFrame.EXIT_ON_CLOSE);
-//создать метку для отображения результатов выбора из меню
-jlab = new JLabel();
-//создать строку меню
-jmb =new JМenuBar();
-//создатьменюFile
-makeFileMenu();
-//создать действия отладки
-makeActions();
-//создать панель инструментов
-makeToolBar();
-//создать меню Options
-makeOptionsMenu();
-//создать меню Help
-makeHelpMenu();
-//создать меню Edit
-makeEditPUМenu();
-//ввести приемник событий запуска всплывающего меню
-jfrm.addМouseListener(
+	class DebugAction extends AbstractAction {
+		public DebugAction(String name, Icon image, int mnem, int ассеl, String tTip) {
+			super(name, image);
+			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(ассеl, InputEvent.CTRL_DOWN_MASK));
+			putValue(MNEMONIC_KEY, new Integer(mnem));
+			putValue(SHORT_DESCRIPTION, tTip);
+		}
 
-	newMouseAdapter(){
-
-	public void mousePressed(MouseEvent me) {
-		if (me.isPopupTrigger())
-			jpu.show(me.getComponent(), me.getX(), me.getY());
+		// обработать события как на панели инструментов, так и в подменю Debug
+		public void actionPerformed(ActionEvent ae) {
+			String comStr = ae.getActionCommand();
+			jlab.setText(comStr + " Selected");// Выбрать указанное
+			// изменить разрешенное состояние вариантов выбора
+			// режимов установкии очистки точек прерывания
+			if (comStr.equals("Set Breakpoint")) {
+				clearAct.setEnabled(true);
+				setAct.setEnabled(false);
+			} else if (comStr.equals("Clear Breakpoint")) {
+				clearAct.setEnabled(false);
+				setAct.setEnabled(true);
+			}
+		}
 	}
 
-};
+	MenuDemoCompleted() {
+		// создать новый контейнер тиnа JFrame
+		jfrm = new JFrame("Menu Demo Completed");
+		// Полная демонстрация меню
+		// использовать граничную компоновку, выбираемую по умолчанию
+		// задать исходные размеры фрейма
+		jfrm.setSize(360, 200);
+		// завершить прикладную программу, когда пользователь закроет ее окно
+		jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// создать метку для отображения результатов выбора из меню
+		jlab = new JLabel();
+		// создать строку меню
+		jmb = new JMenuBar();
+		// создатьменюFile
+		makeFileMenu();
+		// создать действия отладки
+		makeActions();
+		// создать панель инструментов
+		makeToolBar();
+		// создать меню Options
+		makeOptionsMenu();
+		// создать меню Help
+		makeHelpMenu();
+		// создать меню Edit
+		makeEditPUMenu();
+		// ввести приемник событий запуска всплывающего меню
+		jfrm.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent me) {
+				if (me.isPopupTrigger())
+					jpu.show(me.getComponent(), me.getX(), me.getY());
+			}
+			public void mouseReleased(MouseEvent me) {
+				if (me.isPopupTrigger())
+					jpu.show(me.getComponent(), me.getX(), me.getY());
+			}
+		});
 
-	public void mouseReleased(MouseEvent me) {
-		if (me.isPopupTrigger())
-			jpu.show(me.getComponent(), me.getX(), me.getY());
+		// ввести метку в центре панели содержимого
+		jfrm.add(jlab, SwingConstants.CENTER);
+		// ввести панель инструментов в северном положении панели содержимого
+		jfrm.add(jtb, BorderLayout.NORTH);
+		// ввести строку меню во фрейм
+		jfrm.setJMenuBar(jmb);
+		// отобразить фрейм
+		jfrm.setVisible(true);
 	}
-
-	});
-
-	// ввести метку в центре панели содержимого
-	jfrm.add(jlab,SwingConstants.CENTER);
-	// ввести панель инструментов в северном положении панели содержимого
-	jfrm.add(jtb,BorderLayout.NORTH);
-	// ввести строку меню во фрейм
-	jfrm.setJМenuBar(jmЬ);
-	// отобразить фрейм
-	jfrm.setVisible(true);}
 
 	// Обработать события действия от пунктов меню.
 	// Здесь НЕ обрабатываются события, генерируемые
@@ -80,210 +98,157 @@ jfrm.addМouseListener(
 		jlab.setText(comStr + " Selected");
 		// Класс действий для подменю и панели инструментов Debug
 	}
-}
-
-class DebugAction extends AЬstractAction {
-public DebugAction(String name, Iconimage, int mnem, int ассеl, String tTip){
-	super(name,image);
-	putValue(ACCELERATORКЕУ, KeyStroke.getKeyStroke(ассеl, InputEvent.CTRLDOWNМАSК));
-	putValue(МNEMONICКЕУ,newInteger(mnem));-putValue(SHORT_DESCRIPTION,tTip);
-}
-
-	// обработать события как на панели инструментов, так и в подменю Debug
-	public void actionPerformed(ActionEvent ае) {
-		String comStr = ae.getActionCommand();
-		jlab.setText(comStr + " Selected");// Выбрать указанное
-		// изменить разрешенное состояние вариантов выбора
-		// режимов установкии очистки точек прерывания
-		if (comStr.equals("Set Breakpoint")) {
-			clearAct.setEnaЬled(true);
-			setAct.setEnaЬled(false);
-		} else if (comStr.equals("Clear Breakpoint")) {
-			clearAct.setEnaЫed(false);
-			setAct.setEnaЫed(true);
-		}
-	}
-
-	}
 
 	// создать меню File с мнемоникой и оперативными клавишами
-void makeFileMeпu(){
-JМenu jmFile = new JМenu("File");
-jmFile.setMnemonic(KeyEvent.VK_F);
-JMenuitem jmiOpen = new JMenuitem("Open",KeyEvent.VK_O);
-jmiOpen.setAccelerator(
-KeyStroke.getKeyStroke(
-KeyEvent.VK_O,InputEvent.CTRL_DOWN_МASK));
-JМenuitemjmiClose=newJМenuitem("Close",KeyEvent.VKС);
-jmiClose.setAccelerator(-
-KeyStroke.getKeyStroke(
-KeyEvent.VK_C,InputEvent.CTRL_DOWN_МASK));
-JМenuitemjmiSave=newJМenuitem("Save",KeyEvent.VKS);
-jmiSave.setAccelerator(
--
-KeyStroke.getKeyStroke(
-KeyEvent.VKs,InputEvent.CTRLDOWNМАSК));
-JМenuitemjmiExit=newJМenuitem("Exit",KeyEvent:-vкЕ);
-jmiExit.setAccelerator(
--
-KeyStroke.getKeyStroke(KeyEvent.VKЕ,
-InputEvent.CTRL_DOWN_МASK));
-jmFile.add(jmiOpen);
-jmFile.add(jmiClose);
-jmFile.add(jmiSave);
-jmFile.addSeparator();
-jmFile.add(jmiExit);
-jmЬ.add(jmFile);
-//ввестиприемникидействийдляпунктовменюFile
-jmiOpen.addActionListener(this);
-jmiClose.addActionListener(this);
-jmiSave.addActionListener(this);
-jmiExit.addActionListener(this);
-//создатьменюOptiona
-voidmakeOptionsMenu()(
-JМenujmOptions􀁰newJМenu("Options");
-//создатьподменюColora
-JМenujmColors=newJMenu("Colors");
-//использоватьфлажки,чтобыпользовательмогвыбрать
-//сразунесколькоцветов
-JCheckBoxMenuitemjmiRed=newJCheckBoxMenuitem("Red");
-JCheckBoxMenuitemjmiGreen=newJCheckBoxMenuitem("Green");
-JCheckBoxMenuitemjmiBlue=newJCheckBoxMenuitem("Blue");
-//ввестипунктывподменюColors
-jmColors.add(jmiRed);
-jmColors.add(jmiGreen);
-jmColors.add(jmiBlue);
-jmOptions.add(jmColors);
-//создатьподменюPriority
-1205
-1206Часть//1.ВведениевпрограммированиеГПИсредствамиSwing
-JМenujmPriority=newJМenu("Priority"J;
-//Использоватькнопки-переКJIJ)Чателидляустановкиприоритета.
-//Благодаряэтомувменюне·толькоотображаетсяустановленный
-//приоритет,ноигарантируетсяустановкаодногоитолько
-//одногоприоритета.Исходновыбираетсякнопка-переключатель
-//впунктеменюBigh
-JRadioButtonМenuitemjmiHigh=
-newJRadioButtonMenuitem("High",true);
-JRadioButtonМenuitemjmiLow=
-newJRadioButtonMenuitem("Low"J;
-//ввестипунктывподменюPriority
-jmPriority.add(jmiHigh);
-jmPriority.add(jmiLow);
-jmOptionз.add(jmPriority);
-//создатьгруппукнопок-переключателей
-//впунктахподменюPriority
-ButtonGroupbg=newButtonGroup();
-bg.add(jmiHigh);
-bg.add(jmiLow);
-//создатьподменюDeЬug,входящеевменюOptiona,
-//используядействиядлясозданияпунктовэтогоподменю
-JМenujmDebug=newJМenu("Debug"J;
-JМenuitemjmiSetBP=newJМenuitem(зetAct);
-JМenuitemjmiClearBP=newJМenuitem(clearAct);
-JМenuitemjmiReзume=newJМenuitem(resumeAct);
-//ввестипунктывподменюDeЬug
-jmDebug.add(jmiSetBP);
-jmDebug.add(jmiClearBP);
-jmDebug.add(jmiResumeJ;
-jmOptionз.add(jmDebug);
-//создатьпунктменюR8set
-JМenuitemjmiReset=newJМenuitem("Reset");
-jmOptions.addSeparator();
-jmOptions.add(jmiReset);
-//Инаконец,ввестивсевыбираемыеменювстрокуменю
-jmЬ.add(jmOptionз);
-//ввестиприемникидействийдляпунктовменюOptions,
-//крометех,чтоподдерживаютсявподменюDeЬug
-jmiRed.addActionLiзtener(this);
-jmiGreen.addActionListener(this);
-jmiBlue.addActionListener(this);
-jmiHigh.addActionListener(this);
-jmiLow.addActionListener(this);
-jmiReset.addActionListener(this);
-//создатьменюBelp
-voidmakeHelpMenu(){
-JМenujmнelp=newJМenu("Help");
-//ввестизначокдляпунктаменюAЬout
-Imageiconicon=newImageicon("AЬouticon.gif");
-Глава33.ВведениевменюSwing
-JМenuitemjmiAЬout=newJМenuitem("AЬout",icon);
-jmiAЬout.setToolTipText("InfoabouttheMenuDemoprogram.");
-jmНelp.add(jmiAЬout);
-jmЬ.add(jmНelp);
-//ввестиприемникдействийдляпунктаменюAЬout
-jmiAЬout.addActionListener(this);
-//создатьдействиядляуправленияподменюи
-//панельюинструментовDeЬug
-voidmakeActions(){
-//загрузитьизображениядляобозначениядействий
-Image!conseticon=newImageicon("setBP.gif");
-Imageiconclearicon=newImageicon("clearBP.gif");
-Imageiconresumeicon=newImageicon("resume.gif");
-//создатьдействия
-setAct=
-newDebugAction("SetBreakpoint",
-set!con,
-KeyEvent.VKS,
-KeyEvent.VK
--
-B,
-"Setаbreakpoint.");
-clearAct=
-newDebugAction("ClearBreakpoint",
-clearicon,
-KeyEvent.VKС,
-KeyEvent.VK
--
-L,
-"Clearаbreakpoint.");
-resumeAct=
-newDebugAction("Resume",
-resumeicon,
-KeyEvent.VКR,
-KeyEvent.VK
--
-R,
-"Resumeexecutionafterbreakpoint.");
-//InitiallydisaЫetheClearBreakpointoption.
-clearAct.setEnaЫed(false);
-//создатьпанельинструментовDeЬug
-voidmakeToolBar(){
-//создатькнопкидляпанелиинструментов,
-//используясоответствующиедействия
-JButtonjbtnSet=newJButton(setAct);
-JButtonjbtnClear=newJButton(clearAct);
-JButtonjbtnResume=newJButton(resumeAct);
-//создатьпанельинструментовDeЬuq
-jtb=newJToolBar("Breakpoints");
-//ввестикнопкинапанелиинструментов
-jtb.add(jbtnSet);
-jtb.add(jbtnClear);
-jtb.add(jbtnResume);
-//создатьвсплывающееменюEdit
-1207
-1208Часть//1.ВведениевпрограммированиеГПИсредствамиSwing
+	void makeFileMenu() {
+		JMenu jmFile = new JMenu("File");
+		jmFile.setMnemonic(KeyEvent.VK_F);
+		JMenuItem jmiOpen = new JMenuItem("Open", KeyEvent.VK_O);
+		jmiOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+		JMenuItem jmiClose = new JMenuItem("Close", KeyEvent.VK_C);
+		jmiClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+		JMenuItem jmiSave = new JMenuItem("Save", KeyEvent.VK_S);
+		jmiSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+		JMenuItem jmiExit = new JMenuItem("Exit", KeyEvent.VK_E);
+		jmiExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
+		jmFile.add(jmiOpen);
+		jmFile.add(jmiClose);
+		jmFile.add(jmiSave);
+		jmFile.addSeparator();
+		jmFile.add(jmiExit);
+		jmb.add(jmFile);
+		// ввестиприемникидействийдляпунктовменюFile
+		jmiOpen.addActionListener(this);
+		jmiClose.addActionListener(this);
+		jmiSave.addActionListener(this);
+		jmiExit.addActionListener(this);
+	}
 
-voidmakeEditPUMeпu(){
-jpu=пеwJPopupMeпu();
-//создатьпунктывсплывающегоменюEdit
-JМeпuitemjmiCut=пеwJМenu!tem("Cut");
-JМeпuitemjmiCopy=пеwJМenultem("Copy");
-JМenuitemjmiPaste=newJMenuitem("Paste");
-//ввестипунктывовсплывающееменюEdit
-jpu.add(jmiCut);
-jpu.add(jmiCopy);
-jpu.add(jmiPaste);
-//ввестиприемникидействийдлявсплывающегоменюEdit
-jmiCut.addActionListener(this);
-jmiCopy.addActionListener(this);
-jmiPaste.addActionListener(this);
-puЫicstaticvoidmain(Stringargs[]){
-//создатьфреймвпотокедиспетчеризациисобытий
-SwiпgUtilities.invokeLater(
+	// создатьменюOptiona
+	void makeOptionsMenu() {
+		JMenu jmOptions = new JMenu("Options");
+		// создать подменю Colora
+		JMenu jmColors = new JMenu("Colors");
+		// использовать флажки, чтобы пользователь мог выбрать сразу несколько
+		// цветов
+		JCheckBoxMenuItem jmiRed = new JCheckBoxMenuItem("Red");
+		JCheckBoxMenuItem jmiGreen = new JCheckBoxMenuItem("Green");
+		JCheckBoxMenuItem jmiBlue = new JCheckBoxMenuItem("Blue");
+		// ввестипунктывподменюColors
+		jmColors.add(jmiRed);
+		jmColors.add(jmiGreen);
+		jmColors.add(jmiBlue);
+		jmOptions.add(jmColors);
+		// создатьподменюPriority
+		JMenu jmPriority = new JMenu("Priority");
+		// Использовать кнопки-перелючатели для установки приоритета. Благодаря
+		// этому в меню не только отображается
+		// установленный приоритет, но и гарантируется установка одного и только
+		// одного приоритета.
+		// Исходно выбирается кнопка-переключатель в пункте меню High
+		JRadioButtonMenuItem jmiHigh = new JRadioButtonMenuItem("High", true);
+		JRadioButtonMenuItem jmiLow = new JRadioButtonMenuItem("Low");
+		// ввести пункты в подменю Priority
+		jmPriority.add(jmiHigh);
+		jmPriority.add(jmiLow);
+		jmOptions.add(jmPriority);
+		// создать группу кнопок-переключателей в пунктах подменю Priority
+		ButtonGroup bg = new ButtonGroup();
+		bg.add(jmiHigh);
+		bg.add(jmiLow);
+		// создать подменю Debug, входящее в меню Options,
+		// используя действия для создания пунктов этого подменю
+		JMenu jmDebug = new JMenu("Debug");
+		JMenuItem jmiSetBP = new JMenuItem(setAct);
+		JMenuItem jmiClearBP = new JMenuItem(clearAct);
+		JMenuItem jmiResume = new JMenuItem(resumeAct);
+		// ввести пункты в подменю Debug
+		jmDebug.add(jmiSetBP);
+		jmDebug.add(jmiClearBP);
+		jmDebug.add(jmiResume);
+		jmOptions.add(jmDebug);
+		// создать пункт меню Reset
+		JMenuItem jmiReset = new JMenuItem("Reset");
+		jmOptions.addSeparator();
+		jmOptions.add(jmiReset);
+		// И наконец, ввести все выбираемые меню в строку меню
+		jmb.add(jmOptions);
+		// ввести приемники действий для пунктов меню Options,
+		// кроме тех, что поддерживаются в подменю DeЬug
+		jmiRed.addActionListener(this);
+		jmiGreen.addActionListener(this);
+		jmiBlue.addActionListener(this);
+		jmiHigh.addActionListener(this);
+		jmiLow.addActionListener(this);
+		jmiReset.addActionListener(this);
+	}
 
-	newRunnaЬle(){
+	// создать меню Help
+	void makeHelpMenu() {
+		JMenu jmHelp = new JMenu("Help");
+		// ввести значок для пункта меню About
+		ImageIcon icon = new ImageIcon("about_icon.png");
+		JMenuItem jmiAbout = new JMenuItem("About", icon);
+		jmiAbout.setToolTipText("Info about the MenuDemo program.");
+		jmHelp.add(jmiAbout);
+		jmb.add(jmHelp);
+		// ввести приемник действий для пункта меню About
+		jmiAbout.addActionListener(this);
+	}
 
-puЬlicvoidrun(){
+	// создать действия для управления подменю и панелью инструментов Debug
+	void makeActions() {
+		// загрузить изображения для обозначения действий
+		ImageIcon setIcon = new ImageIcon("breakpoint_new.png");
+		ImageIcon clearIcon = new ImageIcon("breakpoint_delete.png");
+		ImageIcon resumeIcon = new ImageIcon("breakpoint_run.png");
+		// создать действия
+		setAct = new DebugAction("Set Breakpoint", setIcon, KeyEvent.VK_S, KeyEvent.VK_B, "Set а breakpoint.");
+		clearAct = new DebugAction("Clear Breakpoint", clearIcon, KeyEvent.VK_C, KeyEvent.VK_L, "Clear а breakpoint.");
+		resumeAct = new DebugAction("Resume", resumeIcon, KeyEvent.VK_R, KeyEvent.VK_R,
+				"Resume execution after breakpoint.");
+		// Initially disable the Clear Breakpoint option.
+		clearAct.setEnabled(false);
+	}
+
+	// создать панель инструментов Debug
+	void makeToolBar() {
+		// создать кнопки для панели инструментов,
+		// используя соответствующие действия
+		JButton jbtnSet = new JButton(setAct);
+		JButton jbtnClear = new JButton(clearAct);
+		JButton jbtnResume = new JButton(resumeAct);
+		// создать панель инструментов Debug
+		jtb = new JToolBar("Breakpoints");
+		// ввести кнопки на панели инструментов
+		jtb.add(jbtnSet);
+		jtb.add(jbtnClear);
+		jtb.add(jbtnResume);
+	}
+
+	// создать всплывающее меню Edit
+	void makeEditPUMenu() {
+		jpu = new JPopupMenu();
+		// создатьпунктывсплывающегоменюEdit
+		JMenuItem jmiCut = new JMenuItem("Cut");
+		JMenuItem jmiCopy = new JMenuItem("Copy");
+		JMenuItem jmiPaste = new JMenuItem("Paste");
+		// ввести пункты во всплывающее меню Edit
+		jpu.add(jmiCut);
+		jpu.add(jmiCopy);
+		jpu.add(jmiPaste);
+		// ввести приемники действий для всплывающего меню Edit
+		jmiCut.addActionListener(this);
+		jmiCopy.addActionListener(this);
+		jmiPaste.addActionListener(this);
+	}
+
+	public static void main(String args[]) {
+		// создать фрейм в потоке диспетчеризации событий
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new MenuDemoCompleted();
+			}
+		});
+	}
 }
-});пеwMeпuDemo();Дал

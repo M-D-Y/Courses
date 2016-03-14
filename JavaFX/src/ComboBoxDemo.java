@@ -42,6 +42,8 @@ public class ComboBoxDemo extends Application {
 		cbTransport = new ComboBox<String>(transportTypes);
 		// установить значение по умолчанию
 		cbTransport.setValue("Train");// Поезд
+		cbTransport.setEditable(true);
+		
 		// установить метку ответной реакции для отображения
 		// результата выбора по умолчанию
 		response.setText("Selected Traпsport is " + cbTransport.getValue());

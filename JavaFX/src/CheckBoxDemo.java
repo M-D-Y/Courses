@@ -48,6 +48,14 @@ public class CheckBoxDemo extends Application {
 		cbWeb = new CheckBox("Web");// Веб
 		cbDesktop = new CheckBox("Desktop");// Настольная система
 		cbMobile = new CheckBox("Mobile");// Мобильное устройство
+		
+		cbWeb.setTooltip(new Tooltip("Deploy to Web"));
+		//Развернуть приложение в веб
+		cbDesktop.setTooltip(new Tooltip("Deploy to Desktop"));
+		//Развернуть приложение в настольной системе
+		cbMobile.setTooltip(new Tooltip("Deploy to Mobile"));
+		//Развернуть приложение на мобильном устройстве
+		
 		cbWeb.setAllowIndeterminate(true);
 		cbDesktop.setAllowIndeterminate(true);
 		cbMobile.setAllowIndeterminate(true);

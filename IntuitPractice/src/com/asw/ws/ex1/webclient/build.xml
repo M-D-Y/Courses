@@ -1,0 +1,34 @@
+<project name="webclient-example" default="build" basedir=".">
+    <property file="build.properties"/>
+    
+    <import file="../../common/targets.xml" />
+    <import file="../common/targets.xml" />
+
+    <target name="copy"
+        depends="prepare" 
+        description="Compile app Java files and copy HTML and JSP pages" >
+        <copy file="${assemble}/${war.file}" todir="${dist}" />
+    </target>
+
+    <target name="build" 
+        depends="build-webclient,package-war,copy"
+        description="Create build directories.">
+    </target>
+
+    <target name="deploy">
+        <antcall target="admin_command_common">
+            <param name="admin.command"
+            value="deploy ${dist}/${war.file}" />
+        </antcall>
+    </target>
+
+    <target name="undeploy">
+        <antcall target="admin_command_common">
+            <param name="admin.command"
+            value="undeploy ${client.context.path}" />
+        </antcall>
+    </target>
+
+    <target name="all" depends="build,deploy" description="Builds, packages, and deploys example." />
+        
+</project>

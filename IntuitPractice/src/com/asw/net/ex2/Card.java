@@ -23,9 +23,11 @@ public class Card implements Serializable{
 		this.balance = balance;
 	}
 	public String person;
-	public transient Date createDate;
+	//public transient Date createDate;
+	public Date createDate;
 	public String cardNumber;
 	public double balance;
+	
 	public String toString(){
 		return "Card: cardNumber="+cardNumber+"\tBalance="+balance+"\tPerson="+person+"\tCreateDate="+createDate+"";
 	}
